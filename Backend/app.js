@@ -1,9 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const Event = require("./models/events");
 const { graphqlHTTP } = require("express-graphql");
 const { buildSchema } = require("graphql");
 
 const app = express();
+
 mongoose
   .connect(
     `mongodb+srv://Abe:test123@cluster0.aphy7.mongodb.net/events?retryWrites=true&w=majority`,
@@ -18,7 +20,6 @@ mongoose
     });
   })
   .catch((e) => console.log(e));
-const events = [];
 
 app.use(express.json());
 app.use(
@@ -55,18 +56,34 @@ app.use(
     `),
     rootValue: {
       events: () => {
-        return events;
+        return Event.find()
+          .then((res) => {
+            return res.map((event) => {
+              return { ...event._doc, _id: event._doc._id.toString() };
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+            throw e;
+          });
       },
       createEvent: (args) => {
-        const event = {
-          _id: Math.random().toString(),
+        const event = new Event({
           title: args.eventInput.title,
           description: args.eventInput.description,
           price: +args.eventInput.price,
-          date: args.eventInput.date,
-        };
-        events.push(event);
-        return event;
+          date: new Date(args.eventInput.date),
+        });
+        return event
+          .save()
+          .then((res) => {
+            console.log(res);
+            return { ...res._doc };
+          })
+          .catch((e) => {
+            console.log(e);
+            throw e;
+          });
       },
     },
     graphiql: true,
