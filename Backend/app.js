@@ -1,9 +1,23 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const { graphqlHTTP } = require("express-graphql");
 const { buildSchema } = require("graphql");
 
 const app = express();
-
+mongoose
+  .connect(
+    `mongodb+srv://Abe:test123@cluster0.aphy7.mongodb.net/events?retryWrites=true&w=majority`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => {
+    app.listen(3000, () => {
+      console.log("Server available at port 3000");
+    });
+  })
+  .catch((e) => console.log(e));
 const events = [];
 
 app.use(express.json());
@@ -61,8 +75,4 @@ app.use(
 
 app.get("/", (req, res) => {
   res.send("Yo");
-});
-
-app.listen(3000, () => {
-  console.log("Server available at port 3000");
 });
