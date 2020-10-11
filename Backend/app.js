@@ -8,6 +8,36 @@ const { buildSchema } = require("graphql");
 
 const app = express();
 
+const events = (eventIds) => {
+  return Event.find({ _id: { $in: eventIds } })
+    .then((events) => {
+      return events.map((event) => {
+        return {
+          ...event._doc,
+          _id: event.id,
+          creator: user.bind(this, event.creator),
+        };
+      });
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
+const user = (userId) => {
+  return User.findById(userId)
+    .then((user) => {
+      return {
+        ...user._doc,
+        _id: user.id,
+        createdEvents: events.bind(this, user._doc.createdEvents),
+      };
+    })
+    .catch((e) => {
+      throw e;
+    });
+};
+
 mongoose
   .connect(
     `mongodb+srv://Abe:test123@cluster0.aphy7.mongodb.net/events?retryWrites=true&w=majority`,
@@ -34,12 +64,14 @@ app.use(
             description : String!
             price : Float!
             date : String!
+            creator : User!
         }
 
         type User {
             _id : ID!
             email : String!
             password : String
+            createdEvents : [Event!]
         }
 
         input EventInput {
@@ -73,7 +105,11 @@ app.use(
         return Event.find()
           .then((res) => {
             return res.map((event) => {
-              return { ...event._doc, _id: event._doc._id.toString() };
+              return {
+                ...event._doc,
+                _id: event._doc._id.toString(),
+                creator: user.bind(this, event._doc.creator),
+              };
             });
           })
           .catch((e) => {
@@ -93,7 +129,11 @@ app.use(
         return event
           .save()
           .then((res) => {
-            createdEvent = { ...res._doc, _id: res._doc._id.toString() };
+            createdEvent = {
+              ...res._doc,
+              _id: res._doc._id.toString(),
+              creator: user.bind(this, res._doc.creator),
+            };
             return User.findById("5f82fb9710f1b716678bcf33");
           })
           .then((user) => {
