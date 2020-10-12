@@ -26,6 +26,15 @@
   margin-bottom: 1rem;
 }
 
+.form-actions p {
+  text-align: center;
+}
+
+.form-actions p span {
+  color: #7b82f3;
+  cursor: pointer;
+}
+
 .form-actions button {
   font: inherit;
   background-color: #7b82f3;
