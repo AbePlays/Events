@@ -77,7 +77,6 @@ function Bookings() {
       })
       .then((res) => {
         const data = res.data.bookings;
-        console.log(data);
         setBookings(data);
       })
       .catch((e) => {
