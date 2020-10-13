@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import Event from "./Event";
 import { AuthContext } from "../../context/AuthContext";
 import Modal from "../modal/Modal";
 import Backdrop from "../modal/Backdrop";
@@ -11,7 +12,7 @@ function Events() {
   const [date, setDate] = useState("");
   const [events, setEvents] = useState([]);
   const [isDark, setIsDark] = useState(false);
-  const { token } = useContext(AuthContext);
+  const { token, userId } = useContext(AuthContext);
 
   const fetchEvents = () => {
     const queryBody = {
@@ -30,7 +31,7 @@ function Events() {
           }
         }
       `,
-    };  
+    };
 
     fetch("http://localhost:1000/graphql", {
       method: "POST",
@@ -52,7 +53,7 @@ function Events() {
       .catch((e) => {
         console.log(e);
       });
-  }
+  };
 
   const confirmHandler = () => {
     const event = { title, price: +price, date, description };
@@ -72,21 +73,17 @@ function Events() {
             description
             date
             price
-            creator {
-              _id
-              email
-            }
           }
         }
       `,
-    };  
+    };
 
     fetch("http://localhost:1000/graphql", {
       method: "POST",
       body: JSON.stringify(queryBody),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
@@ -96,7 +93,20 @@ function Events() {
         return res.json();
       })
       .then((res) => {
-        fetchEvents();
+        setEvents((prev) => {
+          const newEvents = [...prev];
+          newEvents.push({
+            _id: res.data.createEvent._id,
+            title: res.data.createEvent.title,
+            description: res.data.createEvent.description,
+            date: res.data.createEvent.date,
+            price: res.data.createEvent.price,
+            creator: {
+              _id: userId,
+            },
+          });
+          return newEvents;
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -105,7 +115,9 @@ function Events() {
     setIsDark(false);
   };
 
-  useEffect(()=>{fetchEvents()}, [])
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   return (
     <>
@@ -115,6 +127,7 @@ function Events() {
           title="Add Event"
           canCancel
           canConfirm
+          confirmTitle="Confirm"
           confirmHandler={confirmHandler}
           setIsDark={setIsDark}
         >
@@ -162,18 +175,31 @@ function Events() {
           </form>
         </Modal>
       )}
-      {token && <div className="events-control">
-        <p>Share your own events</p>
-        <button
-          onClick={() => {
-            setIsDark(true);
-          }}
-        >
-          Create Event
-        </button>
-      </div>}
+      {token && (
+        <div className="events-control">
+          <p>Share your own events</p>
+          <button
+            onClick={() => {
+              setIsDark(true);
+            }}
+          >
+            Create Event
+          </button>
+        </div>
+      )}
       <ul className="events__list">
-        {events.map(event => <li className="events__list-item" key={event._id}>{event.title}</li>)}
+        {events.map((event) => (
+          <Event
+            key={event._id}
+            title={event.title}
+            eventId={event._id}
+            authUserId={userId}
+            creatorId={event.creator._id}
+            description={event.description}
+            price={event.price}
+            date={event.date}
+          />
+        ))}
       </ul>
     </>
   );

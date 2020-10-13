@@ -19,7 +19,7 @@ function Modal(props) {
           </button>
         )}
         {props.canConfirm && (
-          <button onClick={props.confirmHandler}>Confirm</button>
+          <button onClick={props.confirmHandler}>{props.confirmTitle}</button>
         )}
       </section>
     </div>
