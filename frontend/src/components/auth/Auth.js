@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { useHistory } from "react-router-dom";
 import "./style.css";
 
 function Auth() {
@@ -6,6 +8,8 @@ function Auth() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLogin, setIsLogin] = useState(false);
+  const { login } = useContext(AuthContext);
+  const history = useHistory();
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -60,7 +64,14 @@ function Auth() {
         return res.json();
       })
       .then((res) => {
-        console.log(res);
+        if (res.data.login.token) {
+          login(
+            res.data.login.token,
+            res.data.login.userId,
+            res.data.login.tokenExpiration
+          );
+          history.push("/events");
+        }
       })
       .catch((e) => {
         console.log(e);
