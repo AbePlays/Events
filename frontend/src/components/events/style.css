@@ -1,0 +1,30 @@
+.events-control {
+  text-align: center;
+  border: 1px solid #7b82f3;
+  padding: 1rem;
+  margin: 3rem auto;
+  width: 30rem;
+  max-width: 80%;
+  border-radius: 7px;
+}
+
+.events-control p {
+  font-size: 1.5rem;
+  padding: 1rem;
+  margin: 0;
+}
+
+.events-control button {
+  background-color: #7b82f3;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font: inherit;
+  padding: 0.5rem 2rem;
+  border-radius: 7px;
+  margin-bottom: 1rem;
+}
+
+.events-control button:hover {
+  opacity: 0.7;
+}
