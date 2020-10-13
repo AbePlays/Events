@@ -19,13 +19,7 @@ function Modal(props) {
           </button>
         )}
         {props.canConfirm && (
-          <button
-            onClick={() => {
-              props.setIsDark(false);
-            }}
-          >
-            Confirm
-          </button>
+          <button onClick={props.confirmHandler}>Confirm</button>
         )}
       </section>
     </div>

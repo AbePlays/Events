@@ -95,10 +95,10 @@ function Auth() {
       </div>
       {!isLogin && (
         <div className="form-control">
-          <label htmlFor="password">Confirm Password</label>
+          <label htmlFor="confirm-password">Confirm Password</label>
           <input
             type="password"
-            id="password"
+            id="confirm-password"
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
