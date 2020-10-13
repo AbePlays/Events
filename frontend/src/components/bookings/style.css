@@ -1,0 +1,37 @@
+.bookings__list {
+  list-style: none;
+  width: 30rem;
+  margin: 2rem auto;
+}
+
+.bookings__item {
+  margin: 0.5rem 0;
+  padding: 1rem;
+  border: 1px solid #7b82f3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bookings__item-data h1 {
+  margin: 0 0 0.5rem 0;
+  color: #7b82f3;
+  font-size: 1.25rem;
+}
+
+.bookings__item-data h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.bookings__item-actions button {
+  background-color: #7b82f3;
+  border: none;
+  color: white;
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+}

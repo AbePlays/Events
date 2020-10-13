@@ -117,6 +117,7 @@ function Events() {
 
   useEffect(() => {
     fetchEvents();
+    return () => {};
   }, []);
 
   return (
