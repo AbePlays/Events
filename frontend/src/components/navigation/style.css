@@ -22,7 +22,9 @@
 }
 
 .main-navigation__items li {
+  cursor: pointer;
   margin: 0 1rem;
+  color: black;
 }
 
 .main-navigation__items a {
@@ -31,6 +33,7 @@
 }
 
 .main-navigation__items a:hover,
+.main-navigation__items li:hover,
 .main-navigation__items a:active {
   color: gray;
 }

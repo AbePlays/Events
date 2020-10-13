@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { useHistory } from "react-router-dom";
 import "./style.css";
 
 function Auth() {
@@ -9,7 +8,6 @@ function Auth() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLogin, setIsLogin] = useState(false);
   const { login } = useContext(AuthContext);
-  const history = useHistory();
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -70,7 +68,6 @@ function Auth() {
             res.data.login.userId,
             res.data.login.tokenExpiration
           );
-          history.push("/events");
         }
       })
       .catch((e) => {

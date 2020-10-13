@@ -10,7 +10,10 @@ function AuthContextProvider(props) {
     setToken(token);
     setUserId(userId);
   };
-  const logout = () => {};
+  const logout = () => {
+    setToken();
+    setUserId();
+  };
   return (
     <AuthContext.Provider value={{ token, userId, login, logout }}>
       {props.children}
